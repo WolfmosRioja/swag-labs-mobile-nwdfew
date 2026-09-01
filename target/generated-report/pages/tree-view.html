@@ -1,0 +1,242 @@
+
+    <!--
+    Copyright 2019 trivago N.V.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+    -->
+    <!DOCTYPE html>
+    <html lang="en">
+    <base href="..">
+    <head title="Cluecumber Report - Tree View">
+        <title>Cluecumber Report - Tree View</title>
+        <link rel="icon" href="img/favicon.png" type="image/png"/>
+        <script>
+            const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark-mode');
+            }
+        </script>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="Content-Security-Policy" content="default-src *  data: blob: 'unsafe-inline' 'unsafe-eval';
+script-src * data: blob: 'unsafe-inline' 'unsafe-eval';
+connect-src * data: blob: 'unsafe-inline';
+img-src * data: blob: 'unsafe-inline';
+frame-src * data: blob: ;
+style-src * data: blob: 'unsafe-inline';
+font-src * data: blob: 'unsafe-inline';"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Cluecumber Report">
+<meta name="author" content="Cluecumber Report version 3.12.0">
+<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="css/datatables.min.css">
+<link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="css/jquery.fancybox.min.css"/>
+<link rel="stylesheet" href="css/cluecumber.css" type="text/css">
+<link rel="stylesheet" href="css/cluecumber-custom.css"/>
+<link rel="stylesheet" href="css/cluecumber-additional.css"/>
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/datatables.min.js"></script>
+<script src="js/jquery.fancybox.min.js"></script>
+<script src="js/Chart.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+            // Data tables
+            $('.renderAsDataTable').on('draw.dt', function () {
+                $('[data-toggle="tooltip"]').tooltip();
+            }).DataTable({
+                "oLanguage": {
+                    "sSearch": "Search:"
+                },
+                "pageLength": 25,
+                "responsive": true
+            });
+
+            $(".collapse").click(function () {
+                $(this).toggleClass("expanded");
+            });
+
+            $('.collapse').on('shown.bs.collapse', function (e) {
+                $(e.target).find("iframe").each(function (index, iframe) {
+                    resizeIframe(iframe);
+                })
+            });
+
+            // Lightbox
+            $("a.grouped_elements").fancybox();
+
+            // Tool tips
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // Chart
+
+            if (false) {
+                $(".btn-outline-secondary[data-cluecumber-item='before-after-hooks-button']").click();
+            }
+            if (false) {
+                $(".btn-outline-secondary[data-cluecumber-item='step-hooks-button']").click();
+            }
+            if (false) {
+                $(".scenarioDocstring").collapse("show");
+            }
+            if (false) {
+                $("[data-cluecumber-item='multi-run-button']").click();
+            }
+
+            document.getElementById('dark-light-mode-switch').addEventListener('click', darkLightModeSwitch);
+        }
+    );
+
+    function darkLightModeSwitch() {
+        document.documentElement.classList.toggle('dark-mode');
+        const isDarkMode = document.documentElement.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+        updateDarkLightModeButton(isDarkMode);
+    }
+
+    function updateDarkLightModeButton(isDarkMode) {
+        const button = document.getElementById('dark-light-mode-switch');
+        button.textContent = isDarkMode ? 'Light Mode' : 'Dark Mode';
+    }
+
+    function resizeIframe(iframe) {
+        setInterval(function () {
+            try {
+                iframe.height = iframe.contentWindow.document.body.scrollHeight + 25 + "px";
+            } catch (e) {
+            }
+        }, 500);
+    }
+
+    function copyText(elementId) {
+        let text = document.getElementById(elementId).innerText;
+        if (text.startsWith("Copy to clipboard")) {
+            text = text.substring(18);
+        }
+        navigator.clipboard.writeText(text)
+            .catch((error) => {
+                console.error('Failed to copy text from ' + elementId + ':', error);
+            });
+    }
+</script>    </head>
+    <body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/scenario-summary.html">All Scenarios</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/scenario-sequence.html">Scenario Sequence</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/tag-summary.html">All Tags</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/step-summary.html">All Steps</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/feature-summary.html">All Features</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/exception-summary.html">All Exceptions</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link text-white" href="pages/tree-view.html">Tree View</a>
+                    </li>
+            </ul>
+            <button id="dark-light-mode-switch" class="btn btn-secondary btn-sm text-sm-center">Dark Mode</button>
+            <span class="text-light">2026-09-01 03:19:05</span>
+        </div>
+    </nav>
+    <script>
+        updateDarkLightModeButton(isDarkMode);
+    </script>
+    <main role="main" class="container">
+        <div class="cluecumber-template">
+            <div class="col-sm-12 h-auto text-left clearfix">
+                    <img src="img/logo.png" alt="Logo" class="img-fluid" style="max-width: 300px; max-height: 100px; float: right;"/>
+                    <div id="logo-container"></div>
+                    <h3 style="vertical-align: bottom; float: left;">
+                        <span style="vertical-align: bottom; display: inline-block;">Feature and Scenario Tree</span>
+                    </h3>
+            </div>
+
+    <div class="row" id="tree-view">
+    <div class="col-sm-12  h-auto" data-cluecumber-item="card">
+        <div class="card shadow h-100">
+                <div class="card-header">1 Feature with 1 Scenario</div>
+            <div class="card-body">
+            <div class="tree-view">
+                    <ol>
+                            <li>
+                                    <em>file:src/</em>
+                    <ol>
+                            <li>
+                                    <em>test/</em>
+                    <ol>
+                            <li>
+                                    <em>resources/</em>
+                    <ol>
+                            <li>
+                                    <em>features/</em>
+                    <ol>
+                            <li>
+
+                                        <span data-toggle="tooltip" title="file:src/test/resources/features/login.feature |   As a shopper
+  I want to sign in to the Swag Labs store
+  So that I can browse products and place an order">
+                                            <a href="pages/feature-scenarios/feature_0.html"><strong>Login</strong></a>
+                                        </span>
+
+                                            <ul>
+                                                        <li style="list-style-type: square;">
+                                                            <a href="pages/scenario-detail/scenario_1.html"
+                                                               style="word-break: break-all">Locked out user is blocked from logging in</a>
+                                                        </li>
+                                            </ul>
+                                        <hr>
+                            </li>
+                    </ol>
+                            </li>
+                    </ol>
+                            </li>
+                    </ol>
+                            </li>
+                    </ol>
+                            </li>
+                    </ol>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+        </div>
+    </main>
+
+<footer class="footer navbar-dark">
+    <div class="container-fluid">
+        <span><a href="https://github.com/trivago/cluecumber-report-plugin" target="_blank" class="text-white">Cluecumber Report version 3.12.0</a> - Report generated on 2026-09-01 03:19:05.</span>
+    </div>
+</footer>    </body>
+    </html>
+

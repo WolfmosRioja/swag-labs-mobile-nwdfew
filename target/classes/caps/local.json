@@ -1,0 +1,35 @@
+{
+  "android": {
+    "platformName": "android",
+    "appium:automationName": "UiAutomator2",
+    "appium:uiautomator2ServerInstallTimeout": 20000,
+    "appium:adbExecTimeout": 20000,
+    "appium:newCommandTimeout": 250,
+    "appium:appPackage": "com.juanforeroaxpo.saucedemo",
+    "appium:appActivity": ".MainActivity",
+    "appium:noSign": true,
+    "appium:autoGrantPermissions": true,
+    "appium:disableWindowAnimation": false,
+    "appium:clearSystemFiles": true
+  },
+  "iOS": {
+    "platformName": "iOS",
+    "appium:automationName": "XCUITest",
+    "appium:wdaLaunchTimeout": 80000,
+    "appium:wdaConnectionTimeout": 40000,
+    "appium:clearSystemFiles": true,
+    "appium:newCommandTimeout": 100,
+    "appium:useJSONSource": true,
+    "appium:showXcodeLog": false,
+    "appium:maxTypingFrequency": 10,
+    "appium:settings[useFirstMatch]": true,
+    "appium:settings[snapshotMaxDepth]": 80,
+    "appium:settings[customSnapshotTimeout]": 100,
+    "appium:bundleId": "com.juanforeroaxpo.saucedemo"
+  },
+  "hostMachines": [
+    {
+      "machineIP": "http://localhost:4723"
+    }
+  ]
+}

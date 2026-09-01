@@ -1,0 +1,17 @@
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\capabilities\CapabilityManager.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\capabilities\DesiredCapabilityBuilder.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\device\DeviceManager.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\entities\MobilePlatform.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\exceptions\ExceptionController.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\exceptions\FailAssertion.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\managers\AppiumDriverManager.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\managers\AppiumServerManager.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\managers\PropertiesManager.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\managers\ScenarioManager.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\utils\CommandPrompt.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\utils\helper\AndroidHelper.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\utils\helper\iOSHelper.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\utils\helper\WebdriverHelper.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\utils\JsonParser.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\utils\Timeouts.java
+C:\Users\family\Desktop\projects\swag-labs-mobile-nwdfew\src\main\java\com\swaglabs\utils\Waits.java

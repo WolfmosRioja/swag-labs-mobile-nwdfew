@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.swaglabs.runner.TestRunner
+-------------------------------------------------------------------------------
+Tests run: 19, Failures: 0, Errors: 0, Skipped: 18, Time elapsed: 37.22 s -- in com.swaglabs.runner.TestRunner

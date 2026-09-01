@@ -1,0 +1,486 @@
+
+
+    <!--
+    Copyright 2019 trivago N.V.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+    -->
+    <!DOCTYPE html>
+    <html lang="en">
+    <base href="./../..">
+    <head title="Cluecumber Report - Scenarios with Step">
+        <title>Cluecumber Report - Scenarios with Step</title>
+        <link rel="icon" href="img/favicon.png" type="image/png"/>
+        <script>
+            const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark-mode');
+            }
+        </script>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="Content-Security-Policy" content="default-src *  data: blob: 'unsafe-inline' 'unsafe-eval';
+script-src * data: blob: 'unsafe-inline' 'unsafe-eval';
+connect-src * data: blob: 'unsafe-inline';
+img-src * data: blob: 'unsafe-inline';
+frame-src * data: blob: ;
+style-src * data: blob: 'unsafe-inline';
+font-src * data: blob: 'unsafe-inline';"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Cluecumber Report">
+<meta name="author" content="Cluecumber Report version 3.12.0">
+<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="css/datatables.min.css">
+<link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="css/jquery.fancybox.min.css"/>
+<link rel="stylesheet" href="css/cluecumber.css" type="text/css">
+<link rel="stylesheet" href="css/cluecumber-custom.css"/>
+<link rel="stylesheet" href="css/cluecumber-additional.css"/>
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/datatables.min.js"></script>
+<script src="js/jquery.fancybox.min.js"></script>
+<script src="js/Chart.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+            // Data tables
+            $('.renderAsDataTable').on('draw.dt', function () {
+                $('[data-toggle="tooltip"]').tooltip();
+            }).DataTable({
+                "oLanguage": {
+                    "sSearch": "Search:"
+                },
+                "pageLength": 25,
+                "responsive": true
+            });
+
+            $(".collapse").click(function () {
+                $(this).toggleClass("expanded");
+            });
+
+            $('.collapse').on('shown.bs.collapse', function (e) {
+                $(e.target).find("iframe").each(function (index, iframe) {
+                    resizeIframe(iframe);
+                })
+            });
+
+            // Lightbox
+            $("a.grouped_elements").fancybox();
+
+            // Tool tips
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // Chart
+            var canvas = document.getElementById('chart-area');
+            const ctx = canvas.getContext("2d");
+            const chart = new Chart(ctx, {
+  "data": {
+    "labels": [
+      "passed",
+      "failed",
+      "skipped"
+    ],
+    "datasets": [
+      {
+        "data": [
+          1.0,
+          1.0,
+          0.0
+        ],
+        "backgroundColor": [
+          "rgba(96, 204, 121, 1.000)",
+          "rgba(252, 113, 128, 1.000)",
+          "rgba(247, 196, 43, 1.000)"
+        ]
+      }
+    ]
+  },
+  "options": {
+    "events": [
+      "click",
+      "mousemove"
+    ]
+  },
+  "type": "pie"
+});
+            let original;
+            if (chart.config.type === "pie") {
+                original = Chart.defaults.pie.legend.onClick;
+                chart.options.onClick = function (evt, elements) {
+                    chartArea = elements[0];
+                    if (chartArea === undefined) return;
+                    chartArea.hidden = !chartArea.hidden;
+                    chart.update();
+                    toggleVisibilityByStatus(chartArea._model.label, !chartArea.hidden)
+                };
+            } else if (chart.config.type === "bar") {
+                original = Chart.defaults.global.legend.onClick;
+            }
+
+            chart.options.legend.onClick = function (evt, label) {
+                original.call(this, evt, label);
+                toggleVisibilityByStatus(label.text, label.hidden);
+            };
+
+            function toggleVisibilityByStatus(statusText, show) {
+                const card = $("#card_" + statusText);
+                if (card !== undefined) {
+                    if (show) {
+                        card.show();
+                    } else {
+                        card.hide();
+                    }
+                }
+
+                const row = $(".table-row-" + statusText);
+                if (row !== undefined) {
+                    if (show) {
+                        row.show();
+                    } else {
+                        row.hide();
+                    }
+                }
+            }
+
+
+            if (false) {
+                $(".btn-outline-secondary[data-cluecumber-item='before-after-hooks-button']").click();
+            }
+            if (false) {
+                $(".btn-outline-secondary[data-cluecumber-item='step-hooks-button']").click();
+            }
+            if (false) {
+                $(".scenarioDocstring").collapse("show");
+            }
+            if (true) {
+                $("[data-cluecumber-item='multi-run-button']").click();
+            }
+
+            document.getElementById('dark-light-mode-switch').addEventListener('click', darkLightModeSwitch);
+        }
+    );
+
+    function darkLightModeSwitch() {
+        document.documentElement.classList.toggle('dark-mode');
+        const isDarkMode = document.documentElement.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+        updateDarkLightModeButton(isDarkMode);
+    }
+
+    function updateDarkLightModeButton(isDarkMode) {
+        const button = document.getElementById('dark-light-mode-switch');
+        button.textContent = isDarkMode ? 'Light Mode' : 'Dark Mode';
+    }
+
+    function resizeIframe(iframe) {
+        setInterval(function () {
+            try {
+                iframe.height = iframe.contentWindow.document.body.scrollHeight + 25 + "px";
+            } catch (e) {
+            }
+        }, 500);
+    }
+
+    function copyText(elementId) {
+        let text = document.getElementById(elementId).innerText;
+        if (text.startsWith("Copy to clipboard")) {
+            text = text.substring(18);
+        }
+        navigator.clipboard.writeText(text)
+            .catch((error) => {
+                console.error('Failed to copy text from ' + elementId + ':', error);
+            });
+    }
+</script>    </head>
+    <body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/scenario-summary.html">All Scenarios</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/scenario-sequence.html">Scenario Sequence</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/tag-summary.html">All Tags</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link text-white" href="pages/step-summary.html">All Steps</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/feature-summary.html">All Features</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/exception-summary.html">All Exceptions</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link " href="pages/tree-view.html">Tree View</a>
+                    </li>
+            </ul>
+            <button id="dark-light-mode-switch" class="btn btn-secondary btn-sm text-sm-center">Dark Mode</button>
+            <span class="text-light">2026-09-01 02:59:43</span>
+        </div>
+    </nav>
+    <script>
+        updateDarkLightModeButton(isDarkMode);
+    </script>
+    <main role="main" class="container">
+        <div class="cluecumber-template">
+            <div class="col-sm-12 h-auto text-left clearfix">
+                    <img src="img/logo.png" alt="Logo" class="img-fluid" style="max-width: 300px; max-height: 100px; float: right;"/>
+                    <div id="logo-container"></div>
+                    <h3 style="vertical-align: bottom; float: left;">
+                        <span style="vertical-align: bottom; display: inline-block;">Scenarios using Step</span>
+                    </h3>
+                    <p style="float: left; clear: left; white-space: pre-wrap;">I proceed to checkout</p>
+            </div>
+
+
+    <div class="row" id="scenario-summary">
+    <div class="col-sm-6  h-auto" data-cluecumber-item="card">
+        <div class="card shadow h-100">
+                <div class="card-header">Scenario Results</div>
+            <div class="card-body">
+    <div id="canvas-holder" class="w-auto h-auto text-center" style="min-height: 10rem;" data-cluecumber-item="chart">
+        <canvas id="chart-area" class="w-100"></canvas>
+    </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3  h-auto" data-cluecumber-item="card">
+        <div class="card shadow h-100">
+                <div class="card-header">Scenario Summary</div>
+            <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" data-cluecumber-item="scenario-summary">
+                    2 Scenarios
+                </li>
+                <li class="list-group-item" data-cluecumber-item="scenario-summary">
+                        <a href="javascript:"
+                           onclick="document.location.hash='anchor-passed';">1
+                            passed</a>     <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+       title="passed"><span style="display:none">passed</span></i>
+
+                        <br>
+                        <a href="javascript:"
+                           onclick="document.location.hash='anchor-failed';">1
+                            failed</a>     <i class="color-failed cluecumber-icon icon-failed" data-toggle="tooltip"
+       title="failed"><span style="display:none">failed</span></i>
+
+                        <br>
+                        <a href="javascript:"
+                           onclick="document.location.hash='anchor-skipped';">0
+                            skipped</a>     <i class="color-skipped cluecumber-icon icon-skipped" data-toggle="tooltip"
+       title="skipped"><span style="display:none">skipped</span></i>
+
+                </li>
+            </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3  h-auto" data-cluecumber-item="card">
+        <div class="card shadow h-100">
+                <div class="card-header">Test Suite Info</div>
+            <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" data-cluecumber-item="total-start">
+                        <b>Start</b><br>2026-09-01 02:57:55<br>
+                        <b>End</b><br>2026-09-01 02:59:43<br>
+                    <b>Total</b><br>1m 48s 106ms
+                </li>
+            </ul>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+        <a class="anchor" id="anchor-failed"></a>
+        <div class="row" id="card_failed" data-cluecumber-item="scenario-summary-table">
+            <div class=" col-sm-12">
+                <div class="card shadow">
+
+                            <div class="card-header border-color-failed">
+                                1
+                                failed Scenario
+    <i class="color-failed cluecumber-icon icon-failed" data-toggle="tooltip"
+       title="failed"><span style="display:none">failed</span></i>
+                            </div>
+
+                    <div class="card-body">
+                        <table id="results_failed" class="table table-hover renderAsDataTable">
+                            <thead>
+                            <tr>
+                                <th class="text-left" style="width: 20%;">Feature</th>
+                                <th class="text-left">Scenario</th>
+                                <th class="text-center">Started</th>
+                                <th class="text-center">Duration</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                                        <tr class="table-row-failed">
+                                            <td class="text-left">
+                                                <span data-toggle="tooltip" title="  As a shopper
+  I want to complete a purchase
+  So that the order is processed successfully | file:src/test/resources/features/checkout.feature">
+                                                    <a href="pages/feature-scenarios/feature_0.html">Checkout</a>
+                                                </span>
+                                            </td>
+                                            <td class="text-left">
+                                                <a href="pages/scenario-detail/scenario_2.html"
+                                                   style="word-break: break-all">User completes a full purchase</a>
+
+
+                                                    <div class="firstExceptionContainer">
+                                                        <p class="firstException text-left small text-gray"
+                                                           style="word-break: break-word">
+                                                            java.lang.AssertionError: Element not found: PAGE (timeout) ---&#62; TimeoutException: Expected condition failed: waiting for visibility of Located by By.chained({AppiumBy.androidUIAutomator: resourceId(&#34;finish-button&#34;)})
+                                                            <a class="btn-link" data-toggle="collapse"
+                                                               href="#exc_2" role="button"
+                                                               aria-expanded="false"
+                                                               aria-controls="exc_2">More</a>
+                                                        </p>
+                                                        <div class="collapse mt-2" id="exc_2">
+                                                            <button onclick="copyText('exc_pre_2')"
+                                                                    type="button" class="btn-clipboard">
+                                                                Copy to clipboard
+                                                            </button>
+                                                            <div class="w-100 text-left border border-danger"
+                                                                 id="exc_pre_2">
+                                                                <pre class="text-danger small p-2"
+                                                                     style="white-space: pre-wrap; word-break: break-word">java.lang.AssertionError: Element not found: PAGE (timeout) ---&#62; TimeoutException: Expected condition failed: waiting for visibility of Located by By.chained({AppiumBy.androidUIAutomator: resourceId(&#34;finish-button&#34;)})
+(tried for 20 seconds with 500 milliseconds interval)
+	at org.junit.Assert.fail(Assert.java:89)
+	at com.swaglabs.hooks.Hooks.lambda$beforeScenario$0(Hooks.java:37)
+	at com.swaglabs.exceptions.ExceptionController.handleElementNotFound(ExceptionController.java:40)
+	at com.swaglabs.exceptions.ExceptionController.handleTimeout(ExceptionController.java:48)
+	at page_objects.BaseMobilePage.checkElement(BaseMobilePage.java:46)
+	at page_objects.android.AndroidCheckoutOverviewPage.checkElement(AndroidCheckoutOverviewPage.java:18)
+	at com.swaglabs.stepsDefs.CheckoutStepsDefs.iShouldSeeTheCheckoutOverviewPage(CheckoutStepsDefs.java:47)
+	at &#10045;.I should see the checkout overview page(file:///C:/Users/family/Desktop/projects/swag-labs-mobile-nwdfew/src/test/resources/features/checkout.feature:17)
+</pre>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            </td>
+                                            <td class="text-center small" data-order="2026-09-01T00:58:42.515Z">
+                                                2026-09-01<br>02:58:42
+                                            </td>
+                                            <td class="text-center small" data-order="60.727.731.100">
+                                                <span class="nobr">1m 00s 727ms</span>
+                                            </td>
+                                        </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <a class="anchor" id="anchor-passed"></a>
+        <div class="row" id="card_passed" data-cluecumber-item="scenario-summary-table">
+            <div class=" col-sm-12">
+                <div class="card shadow">
+
+                            <div class="card-header border-color-passed">
+                                1
+                                passed Scenario
+    <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+       title="passed"><span style="display:none">passed</span></i>
+                            </div>
+
+                    <div class="card-body">
+                        <table id="results_passed" class="table table-hover renderAsDataTable">
+                            <thead>
+                            <tr>
+                                <th class="text-left" style="width: 20%;">Feature</th>
+                                <th class="text-left">Scenario</th>
+                                <th class="text-center">Started</th>
+                                <th class="text-center">Duration</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                                        <tr class="table-row-passed">
+                                            <td class="text-left">
+                                                <span data-toggle="tooltip" title="  As a shopper
+  I want to complete a purchase
+  So that the order is processed successfully | file:src/test/resources/features/checkout.feature">
+                                                    <a href="pages/feature-scenarios/feature_0.html">Checkout</a>
+                                                </span>
+                                            </td>
+                                            <td class="text-left">
+                                                <a href="pages/scenario-detail/scenario_1.html"
+                                                   style="word-break: break-all">User completes a full purchase</a>
+
+
+                                            </td>
+                                            <td class="text-center small" data-order="2026-09-01T00:57:55.136Z">
+                                                2026-09-01<br>02:57:55
+                                            </td>
+                                            <td class="text-center small" data-order="47.339.541.400">
+                                                <span class="nobr">0m 47s 339ms</span>
+                                            </td>
+                                        </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementById('multiRunButton');
+            if (!button) return;
+            const target = document.querySelector(button.getAttribute('data-target'));
+
+            button.addEventListener('click', function() {
+                if (target.classList.contains('show')) {
+                    button.textContent = `Show 0 Previous Runs`;
+                } else {
+                    button.textContent = `Hide 0 Previous Runs`;
+                }
+            });
+
+            target.addEventListener('shown.bs.collapse', function() {
+                button.textContent = `Hide 0 Previous Runs`;
+            });
+
+            target.addEventListener('hidden.bs.collapse', function() {
+                button.textContent = `Show 0 Previous Runs`;
+            });
+        });
+    </script>
+        </div>
+    </main>
+
+<footer class="footer navbar-dark">
+    <div class="container-fluid">
+        <span><a href="https://github.com/trivago/cluecumber-report-plugin" target="_blank" class="text-white">Cluecumber Report version 3.12.0</a> - Report generated on 2026-09-01 02:59:43.</span>
+    </div>
+</footer>    </body>
+    </html>
+
